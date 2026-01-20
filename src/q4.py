@@ -22,4 +22,21 @@ def most_common_letter(s: str) -> Optional[str]:
         Ignore case -- 'a' is equal to 'A'. Non-letter characters should be ignored.
         If there are no letters in the string, return None.
     """
-    pass
+     # Count letter frequencies (case-insensitive)
+    letter_counts = {}
+    
+    for char in s:
+        if char.isalpha():
+            lower_char = char.lower()
+            letter_counts[lower_char] = letter_counts.get(lower_char, 0) + 1
+    
+    # If no letters found, return None
+    if not letter_counts:
+        return None
+    
+    # Find the most common letter
+    # In case of tie, return the one that comes first alphabetically
+    max_count = max(letter_counts.values())
+    most_common_letters = [letter for letter, count in letter_counts.items() if count == max_count]
+    
+    return min(most_common_letters)
