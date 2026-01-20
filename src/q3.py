@@ -31,7 +31,16 @@ def income_tax_fed(income: int) -> float:
     float
         The amount of federal income tax they pay
     """
-    pass
+    brackets = {
+        11600: 0.10,
+        47150: 0.12,
+        100525: 0.22,
+        191950: 0.24,
+        243725: 0.32,
+        609350: 0.35,
+        float('inf'): 0.37
+    }
+    return _calculate_progressive_tax(income, brackets)
 
 def income_tax_ca(income: int) -> float:
     """Calculates the amount of state income tax paid by somebody who lives in California
@@ -46,7 +55,18 @@ def income_tax_ca(income: int) -> float:
     float
         The amount of CA state tax they pay if they live in California
     """
-    pass
+    brackets = {
+        10412: 0.01,
+        24684: 0.02,
+        38959: 0.04,
+        54081: 0.06,
+        68350: 0.08,
+        349137: 0.093,
+        418961: 0.103,
+        698271: 0.113,
+        float('inf'): 0.123
+    }
+    return _calculate_progressive_tax(income, brackets)
 
 def income_tax_ma(income: int) -> float:
     """Calculates the amount of state income tax paid by somebody who lives in Massachusetts
@@ -61,7 +81,7 @@ def income_tax_ma(income: int) -> float:
     float
         The amount of MA state tax they pay if they live in Masachusetts
     """
-    pass
+    return income * 0.05
 
 def income_tax_ny(income: int) -> float:
     """Calculates the amount of state income tax paid by somebody who lives in New York state
@@ -76,7 +96,18 @@ def income_tax_ny(income: int) -> float:
     float
         The amount of MA state tax they pay if they live in New York state
     """
-    pass
+    brackets = {
+        8500: 0.04,
+        11700: 0.045,
+        13900: 0.0525,
+        80650: 0.055,
+        215400: 0.06,
+        1077550: 0.0685,
+        5000000: 0.0965,
+        25000000: 0.103,
+        float('inf'): 0.109
+    }
+    return _calculate_progressive_tax(income, brackets)
 
 def calculate_income_tax() -> None:
     """
@@ -85,4 +116,24 @@ def calculate_income_tax() -> None:
     3. Print a sentence formatted like this: "Your income is XX before tax and XX after tax. You pay XX income tax."
     4. Handle invalid unit inputs gracefully with the error message "Invalid state. Please enter CA, MA, or NY."
     """
-    pass
+    state = input("Enter your state (CA, MA, or NY): ").strip().upper()
+    
+    if state not in ["CA", "MA", "NY"]:
+        print("Invalid state. Please enter CA, MA, or NY.")
+        return
+    
+    income = int(input("Enter your annual income: "))
+    
+    federal_tax = income_tax_fed(income)
+    
+    if state == "CA":
+        state_tax = income_tax_ca(income)
+    elif state == "MA":
+        state_tax = income_tax_ma(income)
+    else:
+        state_tax = income_tax_ny(income)
+    
+    total_tax = federal_tax + state_tax
+    after_tax_income = income - total_tax
+    
+    print(f"Your income is {income} before tax and {after_tax_income:.2f} after tax. You pay {total_tax:.2f} income tax.")
